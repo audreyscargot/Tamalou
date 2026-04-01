@@ -14,7 +14,7 @@ ASaveableNPC::ASaveableNPC()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-	SphereComponent->SetupAttachment(RootComponent);
+	SphereComponent->SetupAttachment(GetMesh(), "pelvis");
 	
 }
 
@@ -22,7 +22,8 @@ ASaveableNPC::ASaveableNPC()
 void ASaveableNPC::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	// GetMesh()->SetBodySimulatePhysics("pelvis",true);
+	GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis",true, true);
 }
 
 // Called every frame
@@ -42,9 +43,10 @@ void ASaveableNPC::Interact_Implementation(APlayerCharacter* _player)
 	IInteractInterface::Interact_Implementation(_player);
 	if (!isGrabbed)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Grab"));
 		isGrabbed = true;
-		GetMesh()->IgnoreActorWhenMoving(_player, true);
-		AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "hand_r");
+		SetActorLocation(_player->GetActorLocation());
+		_player->Grab(GetMesh());
 	}
 }
 

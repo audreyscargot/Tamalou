@@ -6,6 +6,7 @@
 #include <rapidjson/document.h>
 
 #include "EnhancedInputComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -23,6 +24,8 @@ APlayerCharacter::APlayerCharacter()
 	
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
 	SphereComponent->SetupAttachment(RootComponent);
+	
+	HandleComponent = CreateDefaultSubobject<UPhysicsHandleComponent>(FName("HandleComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -39,7 +42,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CheckForInteract();
+	MoveGrab();
 }
 
 // Called to bind functionality to input
@@ -49,7 +52,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &APlayerCharacter::CheckForInteract);
 	}
 }
 
@@ -80,23 +83,22 @@ void APlayerCharacter::DoMove(float _right, float _forward)
 void APlayerCharacter::CheckForInteract()
 {
 	// /!\ Make sure to put collision of actor that need interaction to Interactable !!!
-	TArray<AActor*> _overlappingActors;
-	SphereComponent->GetOverlappingActors(_overlappingActors);
-	UE_LOG(LogTemp, Warning, TEXT("%d"), _overlappingActors.Num())
-	if (_overlappingActors.Num() > 0)
+	SphereComponent->GetOverlappingActors(OverlappingActors);
+	if (OverlappingActors.Num() > 0)
 	{
 		float _tempDist;
-		AInteractableObject* _objectToInteract = Cast<AInteractableObject>(UGameplayStatics::FindNearestActor(GetActorLocation(),_overlappingActors, _tempDist));
-		if (!interactableObject || _objectToInteract != interactableObject)
+		AActor* _objectToInteract = Cast<AActor>(UGameplayStatics::FindNearestActor(GetActorLocation(),OverlappingActors, _tempDist));
+		if ((!interactableObject || _objectToInteract != interactableObject) && _objectToInteract)
 		{
 			interactableObject = _objectToInteract; //register object that can be interacted with
 		}
 	}
-	else if (_overlappingActors.Num() == 0)
+	else
 	{
 		interactableObject = nullptr;
+		UE_LOG(LogTemp, Warning, TEXT("No interactable objects found"));
 	}
-	// UE_LOG(LogTemp, Warning, TEXT("%s"), interactableObject ? *interactableObject->GetName() : nullptr)
+	Interact();
 }
 
 void APlayerCharacter::Interact()
@@ -105,5 +107,26 @@ void APlayerCharacter::Interact()
 	{
 		IInteractInterface::Execute_Interact(interactableObject, this);
 	}
+}
+
+void APlayerCharacter::Grab(UPrimitiveComponent* _grabComponent)
+{
+	// _grabComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GetMesh()->GetSocketBoneName("hand_r"));
+	GetPhysicHandle()->GrabComponentAtLocation(_grabComponent, "hand_r", GetMesh()->GetSocketLocation("carrySocket"));
+	// GetPhysicHandle()->GrabComponentAtLocationWithRotation(_grabComponent,"pelvis", GetMesh()->GetComponentLocation(), FRotator(0,90, GetActorRotation().Yaw));
+	GetCapsuleComponent()->IgnoreActorWhenMoving(_grabComponent->GetOwner(),true);
+}
+
+void APlayerCharacter::MoveGrab()
+{
+	if (HandleComponent->GetGrabbedComponent())
+	{
+		HandleComponent->SetTargetLocation(GetMesh()->GetSocketLocation("carrySocket"));
+	}
+}
+
+UPhysicsHandleComponent* APlayerCharacter::GetPhysicHandle()
+{
+	return HandleComponent;
 }
 

@@ -9,7 +9,6 @@
 void ACameraManager::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("BEGINPLAY"));
 	SetCamera();
 }
 
@@ -25,5 +24,4 @@ void ACameraManager::SetCamera()
 	
 		GetOwningPlayerController()->SetViewTarget(Camera);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("DONE"));
 }

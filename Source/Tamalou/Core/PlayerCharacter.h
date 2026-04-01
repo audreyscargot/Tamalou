@@ -6,6 +6,7 @@
 #include "InputAction.h"
 #include "GameFramework/Character.h"
 #include "PhysicsEngine/PhysicalAnimationComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "PlayerCharacter.generated.h"
 
 class AInteractableObject;
@@ -28,6 +29,9 @@ class TAMALOU_API APlayerCharacter : public ACharacter
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component", meta = (AllowPrivateAccess = true))
 	USphereComponent* SphereComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component", meta = (AllowPrivateAccess = true))
+	UPhysicsHandleComponent* HandleComponent;
 
 public:
 	// Sets default values for this character's properties
@@ -45,6 +49,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	AActor* interactableObject;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	TArray<AActor*> OverlappingActors;
 
 public:
 	// Called every frame
@@ -64,4 +71,13 @@ public:
 	
 	UFUNCTION()
 	virtual void Interact();
+	
+	UFUNCTION()
+	virtual void Grab(UPrimitiveComponent* _grabComponent);
+	
+	UFUNCTION()
+	virtual void MoveGrab();
+	
+	UFUNCTION()
+	UPhysicsHandleComponent* GetPhysicHandle();
 };
