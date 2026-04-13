@@ -23,7 +23,7 @@ APlayerCharacter::APlayerCharacter()
 	PhysicalAnimation = CreateDefaultSubobject<UPhysicalAnimationComponent>(FName("PhysicalAnimation"));
 	
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
-	SphereComponent->SetupAttachment(RootComponent);
+	SphereComponent->SetupAttachment(RootComponent); //ajouter attache à un socket du mesh
 	
 	HandleComponent = CreateDefaultSubobject<UPhysicsHandleComponent>(FName("HandleComponent"));
 }
