@@ -10,6 +10,7 @@
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Objects/InteractableObjects/GrabComponent.h"
 #include "PhysicsEngine/PhysicalAnimationComponent.h"
 #include "Tamalou/Interface/InteractInterface.h"
 #include "Tamalou/Objects/InteractableObject.h"
@@ -130,6 +131,8 @@ void APlayerCharacter::Uninteract()
 {
 	if (HandleComponent->GetGrabbedComponent())
 	{
+		UGrabComponent* _tempGrab = HandleComponent->GetGrabbedComponent()->GetOwner()->FindComponentByClass<UGrabComponent>();
+		if (_tempGrab) _tempGrab->UnGrab();
 		HandleComponent->ReleaseComponent();
 	}
 }

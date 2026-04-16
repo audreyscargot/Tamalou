@@ -8,6 +8,7 @@
 #include "Engine/EngineTypes.h"
 #include "SaveableNPC.generated.h"
 
+class UGrabComponent;
 class USphereComponent;
 
 UCLASS()
@@ -17,6 +18,9 @@ class TAMALOU_API ASaveableNPC : public ACharacter, public IInteractInterface
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = true))
 	USphereComponent* SphereComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = true))
+	UGrabComponent* GrabComponent;
 
 public:
 	// Sets default values for this character's properties
@@ -25,9 +29,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
-	bool isGrabbed;
 
 public:
 	// Called every frame

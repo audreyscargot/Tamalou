@@ -11,11 +11,11 @@
 AGrabObjectBase::AGrabObjectBase()
 {
 	GrabComponent = CreateDefaultSubobject<UGrabComponent>("GrabComponent");
+	GrabComponent->SetOwner(this);
 }
 
 void AGrabObjectBase::Interact_Implementation(APlayerCharacter* _player)
 {
-	Super::Interact_Implementation(_player);
-	_player->Grab(GetStaticMesh());
+	if (GrabComponent) GrabComponent->Grab(_player);
 }
 

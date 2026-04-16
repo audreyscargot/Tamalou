@@ -3,33 +3,46 @@
 
 #include "GrabComponent.h"
 
+#include "Core/PlayerCharacter.h"
+
 
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
-}
-
-
-// Called when the game starts
-void UGrabComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
 	
 }
 
-
-// Called every frame
-void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+bool UGrabComponent::GetIsGrabbed() const
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	return isGrabbed;
 }
+
+void UGrabComponent::SetIsGrabbed(bool value)
+{
+	isGrabbed = value;
+}
+
+void UGrabComponent::SetOwner(AInteractableObject* _owner)
+{
+	OwnerInteractable = _owner;
+}
+
+void UGrabComponent::Grab(APlayerCharacter* _player)
+{
+	if (!isGrabbed && OwnerInteractable)
+	{
+		isGrabbed = true;
+		OwnerInteractable->SetActorLocation(_player->GetActorLocation());
+		_player->Grab(OwnerInteractable->GetStaticMesh());
+	}
+}
+
+void UGrabComponent::UnGrab()
+{
+	if (isGrabbed)
+	{
+		isGrabbed = false;
+	}
+}
+
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Objects/InteractableObject.h"
 #include "GrabComponent.generated.h"
 
 
@@ -11,17 +12,29 @@ UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class TAMALOU_API UGrabComponent : public UActorComponent
 {
 	GENERATED_BODY()
+	
+	protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	bool isGrabbed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	AInteractableObject* OwnerInteractable;
 
 public:
-	// Sets default values for this component's properties
 	UGrabComponent();
+	
+	UFUNCTION()
+	bool GetIsGrabbed() const;
+	
+	UFUNCTION()
+	void SetIsGrabbed(bool value);
+	
+	UFUNCTION()
+	virtual void SetOwner(AInteractableObject* _owner);
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	UFUNCTION(BlueprintCallable)
+	virtual void Grab(APlayerCharacter* _player);
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void UnGrab();
 };

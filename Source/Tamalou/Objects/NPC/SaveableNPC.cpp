@@ -4,9 +4,10 @@
 #include "SaveableNPC.h"
 
 #include "Components/SphereComponent.h"
+#include "Objects/InteractableObjects/GrabComponent.h"
 #include "Tamalou/Core/PlayerCharacter.h"
 
-const FName SOCKET = FName(TEXT("pelvisSocket")); //ça marche paaaaaaaas
+const FName SOCKET = FName(TEXT("pelvisSocket"));
 
 // Sets default values
 ASaveableNPC::ASaveableNPC()
@@ -17,6 +18,7 @@ ASaveableNPC::ASaveableNPC()
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SphereComponent->SetupAttachment(GetMesh());
 	
+	GrabComponent = CreateDefaultSubobject<UGrabComponent>("GrabComponent");
 }
 
 // Called when the game starts or when spawned
@@ -42,10 +44,9 @@ void ASaveableNPC::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void ASaveableNPC::Interact_Implementation(APlayerCharacter* _player)
 {
 	IInteractInterface::Interact_Implementation(_player);
-	if (!isGrabbed)
+	if (!GrabComponent->GetIsGrabbed())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Grab"));
-		isGrabbed = true;
+		GrabComponent->SetIsGrabbed(true);
 		SetActorLocation(_player->GetActorLocation());
 		_player->Grab(GetMesh());
 	}

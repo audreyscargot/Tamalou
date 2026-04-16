@@ -36,6 +36,8 @@
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObject.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObject.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/BreakableObject.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/BreakableObject.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/DestroyableComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/DestroyableComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/GrabComponent.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -181,7 +183,7 @@
       <workItem from="1774956598437" duration="11428000" />
       <workItem from="1775045241673" duration="5466000" />
       <workItem from="1776071943187" duration="1252000" />
-      <workItem from="1776326530772" duration="12813000" />
+      <workItem from="1776326530772" duration="17742000" />
     </task>
     <servers />
   </component>

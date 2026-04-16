@@ -54,6 +54,6 @@ public:
 	/**
 	 * Penser à ajouter Add Parent Function just après l'exec de l'event !
 	 */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, meta =(ToolTip="penser à ajouter Add parent function au début de la fonction"))
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EndFunction();
 };
