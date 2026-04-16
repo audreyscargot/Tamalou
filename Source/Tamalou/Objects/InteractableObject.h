@@ -17,6 +17,8 @@ class TAMALOU_API AInteractableObject : public AActor, public IInteractInterface
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = true))
 	USphereComponent* SphereComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true), Category = "Components")
+	UStaticMeshComponent* StaticMesh;
 
 public:
 	// Sets default values for this actor's properties
@@ -29,6 +31,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UStaticMeshComponent* GetStaticMesh();
 	
 	virtual void Interact_Implementation(APlayerCharacter* _player) override;
 };

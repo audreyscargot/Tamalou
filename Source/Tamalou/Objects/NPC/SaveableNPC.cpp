@@ -6,6 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "Tamalou/Core/PlayerCharacter.h"
 
+const FName SOCKET = FName(TEXT("pelvisSocket")); //ça marche paaaaaaaas
 
 // Sets default values
 ASaveableNPC::ASaveableNPC()
@@ -14,7 +15,7 @@ ASaveableNPC::ASaveableNPC()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-	SphereComponent->SetupAttachment(GetMesh(), "pelvis");
+	SphereComponent->SetupAttachment(GetMesh());
 	
 }
 

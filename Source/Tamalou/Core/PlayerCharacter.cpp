@@ -23,7 +23,7 @@ APlayerCharacter::APlayerCharacter()
 	PhysicalAnimation = CreateDefaultSubobject<UPhysicalAnimationComponent>(FName("PhysicalAnimation"));
 	
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollision"));
-	SphereComponent->SetupAttachment(RootComponent); //ajouter attache à un socket du mesh
+	SphereComponent->SetupAttachment(GetMesh(), "pelvis"); //ajouter attache à un socket du mesh
 	
 	HandleComponent = CreateDefaultSubobject<UPhysicsHandleComponent>(FName("HandleComponent"));
 }
@@ -53,6 +53,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &APlayerCharacter::CheckForInteract);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &APlayerCharacter::Uninteract);
 	}
 }
 
@@ -122,6 +123,14 @@ void APlayerCharacter::MoveGrab()
 	if (HandleComponent->GetGrabbedComponent())
 	{
 		HandleComponent->SetTargetLocation(GetMesh()->GetSocketLocation("carrySocket"));
+	}
+}
+
+void APlayerCharacter::Uninteract()
+{
+	if (HandleComponent->GetGrabbedComponent())
+	{
+		HandleComponent->ReleaseComponent();
 	}
 }
 

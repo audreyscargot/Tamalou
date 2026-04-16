@@ -79,5 +79,8 @@ public:
 	virtual void MoveGrab();
 	
 	UFUNCTION()
+	virtual void Uninteract();
+	
+	UFUNCTION()
 	UPhysicsHandleComponent* GetPhysicHandle();
 };
