@@ -24,10 +24,14 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.7/Engine/Source/Runtime/Core/Public/Templates/Tuple.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.7/Engine/Source/Runtime/CoreUObject/Public/UObject/Class.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.7/Engine/Source/Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Core/PlayerCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Core/PlayerCharacter.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Tamalou/Interface/GrabInterface.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Tamalou/Interface/GrabInterface.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Interface/InteractInterface.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Interface/InteractInterface.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/EventBox/AmbulanceEndBox.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -44,6 +48,10 @@
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/GrabComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/GrabObjectBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/GrabObjectBase.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/TEMPObjects/Door.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/TEMPObjects/Door.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/TEMPObjects/Key.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/InteractableObjects/TEMPObjects/Key.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/NPC/SaveableNPC.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/Tamalou/Objects/NPC/SaveableNPC.h" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -75,6 +83,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CidrLocalAttachDebugger.recentlyUsed">
+      <recent name="com.jetbrains.rider.cpp.debugger.RiderCppLLDBDriverConfiguration" />
+    </key>
+  </component>
   <component name="RunManager" selected="C/C++ Project.Tamalou">
     <configuration name="Tamalou" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
@@ -184,6 +197,18 @@
       <workItem from="1775045241673" duration="5466000" />
       <workItem from="1776071943187" duration="1252000" />
       <workItem from="1776326530772" duration="17742000" />
+      <workItem from="1776419685649" duration="1070000" />
+      <workItem from="1777039327059" duration="501000" />
+      <workItem from="1777470147579" duration="23000" />
+      <workItem from="1785683402407" duration="444000" />
+      <workItem from="1785685948236" duration="222000" />
+      <workItem from="1786283534382" duration="7728000" />
+      <workItem from="1786372229066" duration="7093000" />
+      <workItem from="1788867162039" duration="2378000" />
+      <workItem from="1788872985721" duration="226000" />
+      <workItem from="1788873252441" duration="9186000" />
+      <workItem from="1788942559597" duration="7396000" />
+      <workItem from="1788957331623" duration="2338000" />
     </task>
     <servers />
   </component>

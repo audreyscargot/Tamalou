@@ -17,6 +17,9 @@ class TAMALOU_API AAmbulanceEndBox : public AActor
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	UBoxComponent* BoxCollision;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	FTimerHandle CountdownTimerHandle;
 
 public:
 	// Sets default values for this actor's properties
@@ -24,7 +27,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
-	float countdownForWin = 0;
+	float countdownForWin = 3;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	FTimerHandle countdownTimer;
@@ -43,6 +46,9 @@ public:
 	void BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherOverlappedComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	
 	UFUNCTION(BlueprintCallable)
+	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
+	UFUNCTION(BlueprintCallable)
 	virtual void StartCountdown();
 	
 	UFUNCTION(BlueprintCallable)
@@ -56,4 +62,8 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void EndFunction();
+	
+	//TO DELETE/MODIFY LATER
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ShowTempFeedback(bool _yes);
 };

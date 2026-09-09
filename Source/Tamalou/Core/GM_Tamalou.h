@@ -3,9 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlayerCharacter.h"
 #include "GameFramework/GameModeBase.h"
-#include "Camera/CameraActor.h"
 #include "GM_Tamalou.generated.h"
 
 class UCameraComponent;

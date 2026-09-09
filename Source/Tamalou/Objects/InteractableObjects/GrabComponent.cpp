@@ -3,6 +3,7 @@
 
 #include "GrabComponent.h"
 
+#include "GrabObjectBase.h"
 #include "Core/PlayerCharacter.h"
 
 
@@ -22,7 +23,7 @@ void UGrabComponent::SetIsGrabbed(bool value)
 	isGrabbed = value;
 }
 
-void UGrabComponent::SetOwner(AInteractableObject* _owner)
+void UGrabComponent::SetOwner(AGrabObjectBase* _owner)
 {
 	OwnerInteractable = _owner;
 }
@@ -33,7 +34,6 @@ void UGrabComponent::Grab(APlayerCharacter* _player)
 	{
 		isGrabbed = true;
 		OwnerInteractable->SetActorLocation(_player->GetActorLocation());
-		_player->Grab(OwnerInteractable->GetStaticMesh());
 	}
 }
 
@@ -41,6 +41,7 @@ void UGrabComponent::UnGrab()
 {
 	if (isGrabbed)
 	{
+		if (OwnerInteractable) OwnerInteractable->IsUnGrabbed();
 		isGrabbed = false;
 	}
 }

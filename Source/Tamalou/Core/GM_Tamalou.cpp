@@ -2,8 +2,6 @@
 
 
 #include "Tamalou/Core/GM_Tamalou.h"
-
-#include "TamalouController.h"
 #include "Kismet/GameplayStatics.h"
 
 AGM_Tamalou::AGM_Tamalou()
@@ -14,6 +12,9 @@ AGM_Tamalou::AGM_Tamalou()
 void AGM_Tamalou::BeginPlay()
 {
 	//Create new character and broadcast arrival
-	APlayerController* _temp = UGameplayStatics::CreatePlayer(GetWorld(), -1, true);
+	if (GetWorld()->GetNumPlayerControllers() < 2)
+	{
+		APlayerController* _temp = UGameplayStatics::CreatePlayer(GetWorld(), -1, true);
+	}
 }
 

@@ -4,7 +4,6 @@
 #include "Tamalou/Core/InGameCamera.h"
 #include "Kismet/GameplayStatics.h"
 #include "GM_Tamalou.h"
-#include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -26,8 +25,8 @@ void AInGameCamera::BeginPlay()
 {
 	Super::BeginPlay();
 	gameMode = Cast<AGM_Tamalou>(UGameplayStatics::GetGameMode(this));
-	MakePlayersNum();
 	minArmLengthValue = CameraBoom->TargetArmLength;
+	SetActorTickEnabled(true);
 }
 
 void AInGameCamera::Tick(float DeltaTime)
@@ -40,14 +39,14 @@ void AInGameCamera::MakePlayersNum()
 {
 	if (gameMode)
 	{
-		playersNumber = gameMode->GetNumPlayers();
+		playersNumber = UGameplayStatics::GetNumPlayerControllers(this);
 		playersLocationSum = FVector(0,0,0);
 	}
-	SetActorTickEnabled(true);
 }
 
 void AInGameCamera::UpdateCamera()
 {
+	MakePlayersNum();
 	playersLocationSum = FVector(0,0,0);
 	for (int i = 0; i < playersNumber; i++)
 	{

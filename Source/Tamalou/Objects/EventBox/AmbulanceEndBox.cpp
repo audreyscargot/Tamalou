@@ -41,13 +41,29 @@ void AAmbulanceEndBox::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		if (CheckCount())
 		{
 			StartCountdown();
+			ShowTempFeedback(true); //TO DELETE
+		}
+	}
+}
+
+void AAmbulanceEndBox::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+	class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	ASaveableNPC* _NPC = Cast<ASaveableNPC>(OtherActor);
+	if (_NPC)
+	{
+		ChangePatientCount(-1);
+		if (CountdownTimerHandle.IsValid())
+		{
+			UKismetSystemLibrary::K2_ClearAndInvalidateTimerHandle(GetWorld(), CountdownTimerHandle);
+			ShowTempFeedback(false); //TO DELETE
 		}
 	}
 }
 
 void AAmbulanceEndBox::StartCountdown()
 {
-	UKismetSystemLibrary::K2_SetTimer(this, "EndFunction", countdownForWin, false, false, 0,0);
+	CountdownTimerHandle = UKismetSystemLibrary::K2_SetTimer(this, "EndFunction", countdownForWin, false, false, 0,0);
 }
 
 bool AAmbulanceEndBox::CheckCount()
@@ -65,8 +81,12 @@ bool AAmbulanceEndBox::CheckCount()
 void AAmbulanceEndBox::ChangePatientCount(int _count)
 {
 	currentPatientsIn += _count;
+	UE_LOG(LogTemp, Warning, TEXT("Patient count changed to: %d"), currentPatientsIn);
 }
 
+void AAmbulanceEndBox::ShowTempFeedback_Implementation(bool _yes)
+{
+}
 
 void AAmbulanceEndBox::EndFunction_Implementation()
 {

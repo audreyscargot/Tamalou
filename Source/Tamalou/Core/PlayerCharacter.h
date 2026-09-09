@@ -22,6 +22,12 @@ class TAMALOU_API APlayerCharacter : public ACharacter
 	UInputAction* MoveAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta = (AllowPrivateAccess = true))
+	UInputAction* GrabAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta = (AllowPrivateAccess = true))
+	UInputAction* JumpAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input", meta = (AllowPrivateAccess = true))
 	UInputAction* InteractAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component", meta = (AllowPrivateAccess = true))
@@ -52,6 +58,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	TArray<AActor*> OverlappingActors;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	UPhysicsConstraintComponent* PhysicsConstraintComponent;
 
 public:
 	// Called every frame
@@ -67,10 +76,22 @@ public:
 	virtual void DoMove(float _right, float _forward);
 	
 	UFUNCTION()
-	virtual void CheckForInteract();
+	virtual void DoJump();
+	
+	UFUNCTION()
+	virtual void TryGrab();
+	
+	UFUNCTION()
+	virtual void TryInteract();
+	
+	UFUNCTION()
+	virtual void CheckForInteract(bool _isGrab);
 	
 	UFUNCTION()
 	virtual void Interact();
+	
+	UFUNCTION()
+	virtual void InteractGrab();
 	
 	UFUNCTION()
 	virtual void Grab(UPrimitiveComponent* _grabComponent);
@@ -83,4 +104,11 @@ public:
 	
 	UFUNCTION()
 	UPhysicsHandleComponent* GetPhysicHandle();
+	
+	UFUNCTION()
+	virtual void UpdateSpeed();
+	
+	///FUNCTION TO DELETE LATER
+	UFUNCTION(BlueprintCallable)
+	virtual void QuickReload();
 };

@@ -8,6 +8,8 @@
 #include "GrabComponent.generated.h"
 
 
+class AGrabObjectBase;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class TAMALOU_API UGrabComponent : public UActorComponent
 {
@@ -18,7 +20,7 @@ class TAMALOU_API UGrabComponent : public UActorComponent
 	bool isGrabbed;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
-	AInteractableObject* OwnerInteractable;
+	AGrabObjectBase* OwnerInteractable;
 
 public:
 	UGrabComponent();
@@ -30,7 +32,7 @@ public:
 	void SetIsGrabbed(bool value);
 	
 	UFUNCTION()
-	virtual void SetOwner(AInteractableObject* _owner);
+	virtual void SetOwner(AGrabObjectBase* _owner);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Grab(APlayerCharacter* _player);

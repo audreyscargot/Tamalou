@@ -2,11 +2,8 @@
 
 
 #include "Tamalou/Core/TamalouController.h"
-
-#include "CameraManager.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputSubsystems.h"
-#include "Kismet/GameplayStatics.h"
 
 void ATamalouController::BeginPlay()
 {

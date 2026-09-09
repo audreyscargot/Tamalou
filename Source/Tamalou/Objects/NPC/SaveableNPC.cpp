@@ -4,6 +4,7 @@
 #include "SaveableNPC.h"
 
 #include "Components/SphereComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Objects/InteractableObjects/GrabComponent.h"
 #include "Tamalou/Core/PlayerCharacter.h"
 
@@ -25,7 +26,6 @@ ASaveableNPC::ASaveableNPC()
 void ASaveableNPC::BeginPlay()
 {
 	Super::BeginPlay();
-	// GetMesh()->SetBodySimulatePhysics("pelvis",true);
 	GetMesh()->SetAllBodiesBelowSimulatePhysics("pelvis",true, true);
 }
 
@@ -41,14 +41,19 @@ void ASaveableNPC::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void ASaveableNPC::Interact_Implementation(APlayerCharacter* _player)
+void ASaveableNPC::Grab_Implementation(APlayerCharacter* _player)
 {
-	IInteractInterface::Interact_Implementation(_player);
+	IGrabInterface::Grab_Implementation(_player);
 	if (!GrabComponent->GetIsGrabbed())
 	{
 		GrabComponent->SetIsGrabbed(true);
 		SetActorLocation(_player->GetActorLocation());
 		_player->Grab(GetMesh());
 	}
+}
+
+void ASaveableNPC::GetClosestBone(FVector _playerLocation)
+{
+	//pour récupérer bone le plus proche pour le physics handle (prendre pied si plus priche du pied etc)
 }
 

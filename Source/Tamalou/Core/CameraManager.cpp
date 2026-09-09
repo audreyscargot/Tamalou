@@ -3,8 +3,6 @@
 
 #include "Tamalou/Core/CameraManager.h"
 #include "Tamalou/Core/InGameCamera.h"
-#include "Camera/CameraComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 void ACameraManager::BeginPlay()
 {

@@ -29,9 +29,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	
 	UStaticMeshComponent* GetStaticMesh();
 	
 	virtual void Interact_Implementation(APlayerCharacter* _player) override;

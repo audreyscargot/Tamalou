@@ -2,19 +2,21 @@
 
 
 #include "PlayerCharacter.h"
-
-#include <rapidjson/document.h>
-
 #include "EnhancedInputComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Interface/GrabInterface.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Objects/InteractableObjects/GrabComponent.h"
+#include "Objects/NPC/SaveableNPC.h"
 #include "PhysicsEngine/PhysicalAnimationComponent.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "Tamalou/Interface/InteractInterface.h"
-#include "Tamalou/Objects/InteractableObject.h"
 
+const FName GrabSocket = FName(TEXT("HandGrip_L"));
+const int SlowWalkSpeed = 300;
+const int FastWalkSpeed = 600;
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -27,6 +29,8 @@ APlayerCharacter::APlayerCharacter()
 	SphereComponent->SetupAttachment(GetMesh(), "pelvis"); //ajouter attache à un socket du mesh
 	
 	HandleComponent = CreateDefaultSubobject<UPhysicsHandleComponent>(FName("HandleComponent"));
+	
+	PhysicsConstraintComponent = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("PhysConstraintComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -43,7 +47,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	MoveGrab();
+	MoveGrab(); //modifier et mettre un activate Tick à la place
 }
 
 // Called to bind functionality to input
@@ -53,8 +57,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &APlayerCharacter::CheckForInteract);
-		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &APlayerCharacter::Uninteract);
+		EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &APlayerCharacter::TryGrab);
+		EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Completed, this, &APlayerCharacter::Uninteract);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &APlayerCharacter::Jump);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &APlayerCharacter::TryInteract);
 	}
 }
 
@@ -81,8 +87,23 @@ void APlayerCharacter::DoMove(float _right, float _forward)
 	}
 }
 
+void APlayerCharacter::DoJump()
+{
+	Jump();
+}
+
+void APlayerCharacter::TryGrab()
+{
+	CheckForInteract(true);
+}
+
+void APlayerCharacter::TryInteract()
+{
+	CheckForInteract(false);
+}
+
 //Interaction system
-void APlayerCharacter::CheckForInteract()
+void APlayerCharacter::CheckForInteract(bool _isGrab)
 {
 	// /!\ Make sure to put collision of actor that need interaction to Interactable !!!
 	SphereComponent->GetOverlappingActors(OverlappingActors);
@@ -100,6 +121,12 @@ void APlayerCharacter::CheckForInteract()
 		interactableObject = nullptr;
 		UE_LOG(LogTemp, Warning, TEXT("No interactable objects found"));
 	}
+	
+	if (_isGrab)
+	{
+		InteractGrab();
+		return;
+	}
 	Interact();
 }
 
@@ -111,19 +138,29 @@ void APlayerCharacter::Interact()
 	}
 }
 
+void APlayerCharacter::InteractGrab()
+{
+	if (interactableObject && interactableObject->Implements<UGrabInterface>())
+	{
+		IGrabInterface::Execute_Grab(interactableObject, this);
+	}
+}
+
 void APlayerCharacter::Grab(UPrimitiveComponent* _grabComponent)
 {
-	// _grabComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GetMesh()->GetSocketBoneName("hand_r"));
-	GetPhysicHandle()->GrabComponentAtLocation(_grabComponent, "hand_r", GetMesh()->GetSocketLocation("carrySocket"));
-	// GetPhysicHandle()->GrabComponentAtLocationWithRotation(_grabComponent,"pelvis", GetMesh()->GetComponentLocation(), FRotator(0,90, GetActorRotation().Yaw));
+	GetMesh()->SetAllBodiesBelowSimulatePhysics("hand_l", false, true);
+	FVector _grabLocation = GetMesh()->GetSocketLocation("hand_l");
+	GetPhysicHandle()->GrabComponentAtLocation(_grabComponent, "hand_l", _grabLocation);
 	GetCapsuleComponent()->IgnoreActorWhenMoving(_grabComponent->GetOwner(),true);
+	UpdateSpeed();
 }
 
 void APlayerCharacter::MoveGrab()
 {
 	if (HandleComponent->GetGrabbedComponent())
 	{
-		HandleComponent->SetTargetLocation(GetMesh()->GetSocketLocation("carrySocket"));
+		HandleComponent->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetVelocity());
+		HandleComponent->SetTargetLocation(GetMesh()->GetSocketLocation(GrabSocket));
 	}
 }
 
@@ -132,13 +169,33 @@ void APlayerCharacter::Uninteract()
 	if (HandleComponent->GetGrabbedComponent())
 	{
 		UGrabComponent* _tempGrab = HandleComponent->GetGrabbedComponent()->GetOwner()->FindComponentByClass<UGrabComponent>();
-		if (_tempGrab) _tempGrab->UnGrab();
+		if (_tempGrab)
+		{
+			_tempGrab->UnGrab();
+		}
 		HandleComponent->ReleaseComponent();
+		UpdateSpeed();
 	}
 }
 
 UPhysicsHandleComponent* APlayerCharacter::GetPhysicHandle()
 {
 	return HandleComponent;
+}
+
+void APlayerCharacter::UpdateSpeed()
+{
+	if (HandleComponent->GetGrabbedComponent() && HandleComponent->GetGrabbedComponent()->GetOwner()->IsA<ASaveableNPC>())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Class is %s"), *ASaveableNPC::StaticClass()->GetName());
+		GetCharacterMovement()->MaxWalkSpeed = SlowWalkSpeed;
+	}
+	else GetCharacterMovement()->MaxWalkSpeed = FastWalkSpeed;
+}
+
+void APlayerCharacter::QuickReload()
+{
+	
+	UGameplayStatics::OpenLevel(GetWorld(),"LvlTest_Audrey", true);
 }
 
